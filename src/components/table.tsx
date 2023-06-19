@@ -11,12 +11,11 @@ const nuggetsArray = Object.entries(nuggetsFull).map(([key, value]) => ({
   ...value,
 }));
 
-const heatArray = Object.entries(heat).map(([key, value]) => ({
+/*const heatArray = Object.entries(heat).map(([key, value]) => ({
   player: key,
   ...value,
-}));
-console.log(nuggetsArray);
-console.log(heatArray);
+}));*/
+
 type teamData = {
   player: string;
   shottype: string;
@@ -136,7 +135,7 @@ function Table() {
       if (newTeamData === "Nuggets") {
         setPlayers(nuggetsArray);
       } else if (newTeamData === "Heat") {
-        setPlayers(heatArray);
+        setPlayers(nuggetsArray);
       }
     }
   };
