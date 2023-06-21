@@ -11,10 +11,10 @@ const nuggetsArray = Object.entries(nuggetsFull).map(([key, value]) => ({
   ...value,
 }));
 
-/*const heatArray = Object.entries(heat).map(([key, value]) => ({
+const heatArray = Object.entries(heat).map(([key, value]) => ({
   player: key,
   ...value,
-}));*/
+}));
 
 type teamData = {
   player: string;
@@ -69,55 +69,22 @@ const passColumns = [
   { Header: "Passing 3pt FG%", accessor: "pass3ptfgper" },
 ];
 
-const optionState = (initialState: string) => {
-  const [state, setState] = useState(initialState);
-
-  const setOptionState = (newState: string) => {
-    setState(newState);
-  };
+const useInitialPlayerData = () => {
+  const [selectedPlayerData, setSelectedPlayerData] = useState(
+    nuggetsFull["team"]
+  );
 
   return {
-    state,
-    setState: setOptionState,
-  };
-};
-
-const teamDataState = (initialState: string) => {
-  const [teamData, setTeamData] = useState(initialState);
-
-  const setDataState = (newState: string) => {
-    setTeamData(newState);
-  };
-
-  return {
-    teamData,
-    setTeamData: setDataState,
-  };
-};
-
-const playerDataState = (initialState: any) => {
-  initialState = nuggetsFull["team"];
-  const [playerData, setPlayerData] = useState(initialState);
-
-  const setPlayerDataState = (newState: any) => {
-    setPlayerData(newState);
-  };
-  return {
-    playerData,
-    setPlayerData: setPlayerDataState,
+    selectedPlayerData,
+    setSelectedPlayerData,
   };
 };
 
 function Table() {
-  const { state: selectedOption, setState: setSelectedOption } =
-    optionState("total");
-  const { teamData: selectedTeamData, setTeamData: setSelectedTeamData } =
-    teamDataState("Nuggets");
+  const [selectedOption, setSelectedOption] = useState("total");
+  const [selectedTeamData, setSelectedTeamData] = useState("Nuggets");
   const [players, setPlayers] = useState([...nuggetsArray]);
-  const {
-    playerData: selectedPlayerData,
-    setPlayerData: setSelectedPlayerData,
-  } = playerDataState("team");
+  const [selectedPlayerData, setSelectedPlayerData] = useInitialPlayerData();
 
   const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newOption = event.target.value;
@@ -135,22 +102,22 @@ function Table() {
       if (newTeamData === "Nuggets") {
         setPlayers(nuggetsArray);
       } else if (newTeamData === "Heat") {
-        setPlayers(nuggetsArray);
+        setPlayers(heatArray as any);
       }
     }
   };
 
   const handlePlayerDataChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const newPlayerData = event.target.value;
+    const playerKey = event.target.value;
+    debugger;
 
-    if (newPlayerData !== selectedPlayerData) {
+    if (playerKey !== selectedPlayerData?.player) {
       if (selectedTeamData === "Nuggets") {
-        let playerArray =
-          nuggetsFull[newPlayerData as keyof typeof nuggetsFull];
-        setSelectedPlayerData(playerArray);
+        const playerArray = nuggetsFull[playerKey as keyof typeof nuggetsFull];
+        setSelectedPlayerData(playerArray as any);
       } else if (selectedTeamData === "Heat") {
-        let playerArray = heat[newPlayerData as keyof typeof heat];
-        setSelectedPlayerData(playerArray);
+        const playerArray = heat[playerKey as keyof typeof heat];
+        setSelectedPlayerData(playerArray as any);
       }
     }
   };
@@ -170,7 +137,9 @@ function Table() {
     [selectedOption]
   );
 
-  const tableInstance = useTable({ columns, data });
+  console.log("data", data);
+  console.log("cols", columns);
+  const tableInstance = useTable({ columns, data } as any);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
@@ -183,7 +152,7 @@ function Table() {
           handleTeamDataChange={handleTeamDataChange}
         />
         <PlayerDataDropdown
-          selectedPlayerData={selectedPlayerData}
+          selectedPlayerData={selectedPlayerData?.player}
           handlePlayerDataChange={handlePlayerDataChange}
           players={players}
         />
@@ -210,6 +179,7 @@ function Table() {
         </thead>
         <tbody {...getTableBodyProps()}>
           {rows.map((row) => {
+            debugger;
             prepareRow(row);
             return (
               <tr
