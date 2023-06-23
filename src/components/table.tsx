@@ -1,20 +1,22 @@
 import { useTable, Column } from "react-table";
 import { useState, ChangeEvent, useMemo } from "react";
-import nuggetsFull from "../data/NuggetsFULL.json";
+import nuggets from "../data/Nuggets.json";
 import heat from "../data/Heat.json";
 import TeamDataDropdown from "./teamDataDropdown";
 import FilterDropdown from "./filterDropdown";
 import PlayerDataDropdown from "./playerDropdown";
+import GameDropdown from "./gameDropdown";
 
-const nuggetsArray = Object.entries(nuggetsFull).map(([key, value]) => ({
-  player: key,
-  ...value,
-}));
+const makeArray = (data: object) =>
+  Object.entries(data).map(([key, value]) => ({
+    ...value,
+  }));
 
-const heatArray = Object.entries(heat).map(([key, value]) => ({
-  player: key,
-  ...value,
-}));
+const makePlayerArray = (data: object) =>
+  Object.entries(data).map(([key, value]) => ({
+    player: key,
+    ...value,
+  }));
 
 type teamData = {
   player: string;
@@ -72,11 +74,12 @@ const passColumns = [
 function Table() {
   const [selectedOption, setSelectedOption] = useState("total");
   const [selectedTeamData, setSelectedTeamData] = useState("Nuggets");
-  const [players, setPlayers] = useState([...nuggetsArray]);
+  const [players, setPlayers] = useState([...makePlayerArray(nuggets.Overall)]);
   const [selectedPlayer, setSelectedPlayer] = useState("team");
   const [selectedPlayerData, setSelectedPlayerData] = useState(
-    nuggetsFull["team"]
+    nuggets.Overall.team
   );
+  const [selectedGame, setSetlectedGame] = useState("overall");
 
   const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newOption = event.target.value;
@@ -92,13 +95,13 @@ function Table() {
     if (newTeamData !== selectedTeamData) {
       setSelectedTeamData(newTeamData);
       if (newTeamData === "Nuggets") {
-        setPlayers(nuggetsArray);
+        setPlayers(makePlayerArray(nuggets.Overall));
         setSelectedPlayer("team");
-        setSelectedPlayerData(nuggetsFull["team"]);
+        setSelectedPlayerData(nuggets.Overall.team);
       } else if (newTeamData === "Heat") {
-        setPlayers(heatArray as any);
+        setPlayers(makePlayerArray(heat.Overall));
         setSelectedPlayer("team");
-        setSelectedPlayerData(heat["team"] as any);
+        setSelectedPlayerData(heat.Overall.team as any);
       }
     }
   };
@@ -113,12 +116,20 @@ function Table() {
   };
 
   const handlePlayerDataChange = (player: string) => {
-    if (selectedTeamData === "Nuggets") {
-      const playerArray = nuggetsFull[player as keyof typeof nuggetsFull];
+    if (selectedTeamData === "Nuggets" && selectedGame === "overall") {
+      const playerArray =
+        nuggets.Overall[player as keyof typeof nuggets.Overall];
       setSelectedPlayerData(playerArray as any);
-    } else if (selectedTeamData === "Heat") {
-      const playerArray = heat[player as keyof typeof heat];
+    } else if (selectedTeamData === "Heat" && selectedGame === "overall") {
+      const playerArray = heat.Overall[player as keyof typeof heat.Overall];
       setSelectedPlayerData(playerArray as any);
+    }
+  };
+
+  const handleGameChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const newGame = event.target.value;
+    if (newGame != selectedGame) {
+      setSetlectedGame(newGame);
     }
   };
 
@@ -157,6 +168,10 @@ function Table() {
         <FilterDropdown
           selectedOption={selectedOption}
           handleOptionChange={handleOptionChange}
+        />
+        <GameDropdown
+          selectedGame={selectedGame}
+          handleGameChange={handleGameChange}
         />
       </div>
       <table {...getTableProps()}>
