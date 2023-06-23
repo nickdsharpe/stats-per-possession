@@ -76,9 +76,7 @@ function Table() {
   const [selectedTeamData, setSelectedTeamData] = useState("Nuggets");
   const [players, setPlayers] = useState([...makePlayerArray(nuggets.Overall)]);
   const [selectedPlayer, setSelectedPlayer] = useState("team");
-  const [selectedPlayerData, setSelectedPlayerData] = useState(
-    nuggets.Overall.team
-  );
+  const [selectedData, setSelectedData] = useState(nuggets.Overall.team);
   const [selectedGame, setSetlectedGame] = useState("overall");
 
   const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -97,11 +95,11 @@ function Table() {
       if (newTeamData === "Nuggets") {
         setPlayers(makePlayerArray(nuggets.Overall));
         setSelectedPlayer("team");
-        setSelectedPlayerData(nuggets.Overall.team);
+        setSelectedData(nuggets.Overall.team);
       } else if (newTeamData === "Heat") {
         setPlayers(makePlayerArray(heat.Overall));
         setSelectedPlayer("team");
-        setSelectedPlayerData(heat.Overall.team as any);
+        setSelectedData(heat.Overall.team as any);
       }
     }
   };
@@ -119,10 +117,10 @@ function Table() {
     if (selectedTeamData === "Nuggets" && selectedGame === "overall") {
       const playerArray =
         nuggets.Overall[player as keyof typeof nuggets.Overall];
-      setSelectedPlayerData(playerArray as any);
+      setSelectedData(playerArray as any);
     } else if (selectedTeamData === "Heat" && selectedGame === "overall") {
       const playerArray = heat.Overall[player as keyof typeof heat.Overall];
-      setSelectedPlayerData(playerArray as any);
+      setSelectedData(playerArray as any);
     }
   };
 
@@ -130,10 +128,18 @@ function Table() {
     const newGame = event.target.value;
     if (newGame != selectedGame) {
       setSetlectedGame(newGame);
+      if (newGame === "Game5") {
+        if (selectedTeamData === "Nuggets") {
+          setSelectedData(makePlayerArray([nuggets.Game5.team]));
+        }
+        if (selectedTeamData === "Heat") {
+          setSelectedData(makePlayerArray([heat.Game5.team]));
+        }
+      }
     }
   };
 
-  const data = useMemo(() => selectedPlayerData, [selectedPlayerData]);
+  const data = useMemo(() => selectedData, [selectedData]);
 
   const columns: Column<teamData>[] = useMemo(
     () => [
