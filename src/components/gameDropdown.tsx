@@ -20,9 +20,9 @@ const GameDropdown: React.FC<GameDropdownProps> = ({
             value={selectedGame}
             onChange={handleGameChange}
           >
-            <option value="overall">Overall</option>
-            <option value="game3">Game 3</option>
-            <option value="game5">Game 5</option>
+            <option value="Overall">Overall</option>
+            <option value="Game3">Game 3</option>
+            <option value="Game5">Game 5</option>
           </select>
         </div>
       </div>
