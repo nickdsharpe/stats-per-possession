@@ -70,9 +70,7 @@ const passColumns = [
 ];
 
 const useInitialPlayerData = () => {
-  const [selectedPlayerData, setSelectedPlayerData] = useState(
-    nuggetsFull["team"]
-  );
+  const [selectedPlayerData, setSelectedPlayerData] = useState(nuggetsArray);
 
   return {
     selectedPlayerData,
