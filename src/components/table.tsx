@@ -69,20 +69,14 @@ const passColumns = [
   { Header: "Passing 3pt FG%", accessor: "pass3ptfgper" },
 ];
 
-const useInitialPlayerData = () => {
-  const [selectedPlayerData, setSelectedPlayerData] = useState(nuggetsArray);
-
-  return {
-    selectedPlayerData,
-    setSelectedPlayerData,
-  };
-};
-
 function Table() {
   const [selectedOption, setSelectedOption] = useState("total");
   const [selectedTeamData, setSelectedTeamData] = useState("Nuggets");
   const [players, setPlayers] = useState([...nuggetsArray]);
-  const [selectedPlayerData, setSelectedPlayerData] = useInitialPlayerData();
+  const [selectedPlayer, setSelectedPlayer] = useState("team");
+  const [selectedPlayerData, setSelectedPlayerData] = useState(
+    nuggetsFull["team"]
+  );
 
   const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newOption = event.target.value;
@@ -99,24 +93,32 @@ function Table() {
       setSelectedTeamData(newTeamData);
       if (newTeamData === "Nuggets") {
         setPlayers(nuggetsArray);
+        setSelectedPlayer("team");
+        setSelectedPlayerData(nuggetsFull["team"]);
       } else if (newTeamData === "Heat") {
         setPlayers(heatArray as any);
+        setSelectedPlayer("team");
+        setSelectedPlayerData(heat["team"] as any);
       }
     }
   };
 
-  const handlePlayerDataChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const playerKey = event.target.value;
-    debugger;
+  const handlePlayerChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const newPlayer = event.target.value;
 
-    if (playerKey !== selectedPlayerData?.player) {
-      if (selectedTeamData === "Nuggets") {
-        const playerArray = nuggetsFull[playerKey as keyof typeof nuggetsFull];
-        setSelectedPlayerData(playerArray as any);
-      } else if (selectedTeamData === "Heat") {
-        const playerArray = heat[playerKey as keyof typeof heat];
-        setSelectedPlayerData(playerArray as any);
-      }
+    if (newPlayer != selectedPlayer) {
+      setSelectedPlayer(newPlayer);
+      handlePlayerDataChange(newPlayer);
+    }
+  };
+
+  const handlePlayerDataChange = (player: string) => {
+    if (selectedTeamData === "Nuggets") {
+      const playerArray = nuggetsFull[player as keyof typeof nuggetsFull];
+      setSelectedPlayerData(playerArray as any);
+    } else if (selectedTeamData === "Heat") {
+      const playerArray = heat[player as keyof typeof heat];
+      setSelectedPlayerData(playerArray as any);
     }
   };
 
@@ -135,8 +137,6 @@ function Table() {
     [selectedOption]
   );
 
-  console.log("data", data);
-  console.log("cols", columns);
   const tableInstance = useTable({ columns, data } as any);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -150,8 +150,8 @@ function Table() {
           handleTeamDataChange={handleTeamDataChange}
         />
         <PlayerDataDropdown
-          selectedPlayerData={selectedPlayerData?.player}
-          handlePlayerDataChange={handlePlayerDataChange}
+          selectedPlayer={selectedPlayer}
+          handlePlayerChange={handlePlayerChange}
           players={players}
         />
         <FilterDropdown
@@ -177,7 +177,6 @@ function Table() {
         </thead>
         <tbody {...getTableBodyProps()}>
           {rows.map((row) => {
-            debugger;
             prepareRow(row);
             return (
               <tr

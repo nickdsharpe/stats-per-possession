@@ -1,14 +1,14 @@
 import { ChangeEvent } from "react";
 
 type PlayerDataDropdownProps = {
-  selectedPlayerData: string;
-  handlePlayerDataChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+  selectedPlayer: string;
+  handlePlayerChange: (event: ChangeEvent<HTMLSelectElement>) => void;
   players: any;
 };
 
 const PlayerDataDropdown: React.FC<PlayerDataDropdownProps> = ({
-  selectedPlayerData,
-  handlePlayerDataChange,
+  selectedPlayer,
+  handlePlayerChange,
   players,
 }) => {
   return (
@@ -19,8 +19,8 @@ const PlayerDataDropdown: React.FC<PlayerDataDropdownProps> = ({
           <select
             className="data-dropdown"
             id="dataSelect"
-            value={selectedPlayerData}
-            onChange={handlePlayerDataChange}
+            value={selectedPlayer}
+            onChange={handlePlayerChange}
           >
             {players.map((player: any) => (
               <option key={player.player} value={player.name}>
