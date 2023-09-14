@@ -8,10 +8,10 @@ function DrawPlotlyCourt() {
       {
         source: courtImage,
         x: 0,
-        y: 180,
+        y: 200,
         xref: "x",
         yref: "y",
-        sizex: 470,
+        sizex: 500,
         sizey: 520,
         opacity: 1.0,
         layer: "below",
