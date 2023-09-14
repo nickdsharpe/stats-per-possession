@@ -2,12 +2,12 @@ import { ChangeEvent } from "react";
 
 type TeamDataDropdownProps = {
   selectedTeamData: string;
-  handleTeamDataChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+  handleTeamChange: (event: ChangeEvent<HTMLSelectElement>) => void;
 };
 
 const TeamDataDropdown: React.FC<TeamDataDropdownProps> = ({
   selectedTeamData,
-  handleTeamDataChange,
+  handleTeamChange,
 }) => {
   return (
     <div>
@@ -18,7 +18,7 @@ const TeamDataDropdown: React.FC<TeamDataDropdownProps> = ({
             className="data-dropdown"
             id="dataSelect"
             value={selectedTeamData}
-            onChange={handleTeamDataChange}
+            onChange={handleTeamChange}
           >
             <option value="Nuggets">Nuggets</option>
             <option value="Heat">Heat</option>

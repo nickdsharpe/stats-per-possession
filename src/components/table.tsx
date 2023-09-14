@@ -1,20 +1,17 @@
 import { useTable, Column } from "react-table";
 import { useState, ChangeEvent, useMemo } from "react";
-import nuggetsFull from "../data/NuggetsFULL.json";
+import nuggets from "../data/Nuggets.json";
 import heat from "../data/Heat.json";
 import TeamDataDropdown from "./teamDataDropdown";
 import FilterDropdown from "./filterDropdown";
 import PlayerDataDropdown from "./playerDropdown";
+import GameDropdown from "./gameDropdown";
 
-const nuggetsArray = Object.entries(nuggetsFull).map(([key, value]) => ({
-  player: key,
-  ...value,
-}));
-
-const heatArray = Object.entries(heat).map(([key, value]) => ({
-  player: key,
-  ...value,
-}));
+const makePlayerArray = (data: object) =>
+  Object.entries(data).map(([key, value]) => ({
+    player: key,
+    ...value,
+  }));
 
 type teamData = {
   player: string;
@@ -72,11 +69,10 @@ const passColumns = [
 function Table() {
   const [selectedOption, setSelectedOption] = useState("total");
   const [selectedTeamData, setSelectedTeamData] = useState("Nuggets");
-  const [players, setPlayers] = useState([...nuggetsArray]);
+  const [players, setPlayers] = useState([...makePlayerArray(nuggets.Overall)]);
   const [selectedPlayer, setSelectedPlayer] = useState("team");
-  const [selectedPlayerData, setSelectedPlayerData] = useState(
-    nuggetsFull["team"]
-  );
+  const [selectedData, setSelectedData] = useState(nuggets.Overall.team);
+  const [selectedGame, setselectedGame] = useState("Overall");
 
   const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newOption = event.target.value;
@@ -86,19 +82,19 @@ function Table() {
     }
   };
 
-  const handleTeamDataChange = (event: ChangeEvent<HTMLSelectElement>) => {
+  const handleTeamChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newTeamData = event.target.value;
 
     if (newTeamData !== selectedTeamData) {
       setSelectedTeamData(newTeamData);
       if (newTeamData === "Nuggets") {
-        setPlayers(nuggetsArray);
+        setPlayers(makePlayerArray(nuggets.Overall));
         setSelectedPlayer("team");
-        setSelectedPlayerData(nuggetsFull["team"]);
+        setSelectedData(nuggets.Overall.team);
       } else if (newTeamData === "Heat") {
-        setPlayers(heatArray as any);
+        setPlayers(makePlayerArray(heat.Overall));
         setSelectedPlayer("team");
-        setSelectedPlayerData(heat["team"] as any);
+        setSelectedData(heat.Overall.team as any);
       }
     }
   };
@@ -112,17 +108,44 @@ function Table() {
     }
   };
 
-  const handlePlayerDataChange = (player: string) => {
+  const handlePlayerDataChange = (newPlayer: string) => {
     if (selectedTeamData === "Nuggets") {
-      const playerArray = nuggetsFull[player as keyof typeof nuggetsFull];
-      setSelectedPlayerData(playerArray as any);
+      const playerArray =
+        nuggets[selectedGame as "Overall"][
+          newPlayer as keyof typeof nuggets.Overall
+        ];
+      setSelectedData(playerArray as any);
     } else if (selectedTeamData === "Heat") {
-      const playerArray = heat[player as keyof typeof heat];
-      setSelectedPlayerData(playerArray as any);
+      const playerArray =
+        heat[selectedGame as "Overall"][newPlayer as keyof typeof heat.Overall];
+      setSelectedData(playerArray as any);
     }
   };
 
-  const data = useMemo(() => selectedPlayerData, [selectedPlayerData]);
+  const handleGameChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const newGame = event.target.value;
+    if (newGame != selectedGame) {
+      setselectedGame(newGame);
+      handleGameDataChange(newGame);
+    }
+  };
+
+  const handleGameDataChange = (newGame: string) => {
+    if (selectedTeamData === "Nuggets") {
+      const gameData =
+        nuggets[newGame as "Overall"][
+          selectedPlayer as keyof typeof nuggets.Overall
+        ];
+      setSelectedData(gameData as any);
+    }
+    if (selectedTeamData === "Heat") {
+      const gameData =
+        heat[newGame as "Overall"][selectedPlayer as keyof typeof heat.Overall];
+      setSelectedData(gameData as any);
+    }
+  };
+
+  const data = useMemo(() => selectedData, [selectedData]);
 
   const columns: Column<teamData>[] = useMemo(
     () => [
@@ -147,7 +170,7 @@ function Table() {
       <div className="dropdown-wrapper">
         <TeamDataDropdown
           selectedTeamData={selectedTeamData}
-          handleTeamDataChange={handleTeamDataChange}
+          handleTeamChange={handleTeamChange}
         />
         <PlayerDataDropdown
           selectedPlayer={selectedPlayer}
@@ -157,6 +180,10 @@ function Table() {
         <FilterDropdown
           selectedOption={selectedOption}
           handleOptionChange={handleOptionChange}
+        />
+        <GameDropdown
+          selectedGame={selectedGame}
+          handleGameChange={handleGameChange}
         />
       </div>
       <table {...getTableProps()}>
