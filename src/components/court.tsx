@@ -1,22 +1,22 @@
 import Plot from "react-plotly.js";
+import initial_state from "../assets/initial_state.json";
+import courtImage from "../assets/court_image.jpg";
 
 function DrawPlotlyCourt() {
-  const courtImage = "court_image.jpg";
-
   const layout: Partial<Plotly.Layout> = {
     images: [
       {
         source: courtImage,
-        x: 250,
-        y: -52.5,
+        x: 0,
+        y: 180,
         xref: "x",
         yref: "y",
-        sizex: 1,
-        sizey: 1,
+        sizex: 470,
+        sizey: 520,
         opacity: 1.0,
         layer: "below",
-        xanchor: "right",
-        yanchor: "bottom",
+        xanchor: "center",
+        yanchor: "middle",
       },
     ],
     xaxis: {
@@ -35,8 +35,8 @@ function DrawPlotlyCourt() {
   // Define your scatter trace data
   const scatterTrace: Partial<Plotly.PlotData> = {
     type: "scatter",
-    x: [16],
-    y: [66],
+    x: [-250],
+    y: [-52.5],
     mode: "markers",
     marker: {
       opacity: 1.0,
@@ -49,7 +49,7 @@ function DrawPlotlyCourt() {
       data={[scatterTrace]}
       layout={layout}
       config={{ displayModeBar: false }}
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: 500, height: 470 }}
     />
   );
 }
