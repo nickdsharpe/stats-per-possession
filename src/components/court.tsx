@@ -1,24 +1,7 @@
 import Plot from "react-plotly.js";
 
 function DrawPlotlyCourt() {
-  const courtImage = "court_image.jpg";
-
   const layout: Partial<Plotly.Layout> = {
-    images: [
-      {
-        source: courtImage,
-        x: 250,
-        y: -52.5,
-        xref: "x",
-        yref: "y",
-        sizex: 1,
-        sizey: 1,
-        opacity: 1.0,
-        layer: "below",
-        xanchor: "right",
-        yanchor: "bottom",
-      },
-    ],
     xaxis: {
       range: [-250, 250],
       showgrid: false,
@@ -49,7 +32,7 @@ function DrawPlotlyCourt() {
       data={[scatterTrace]}
       layout={layout}
       config={{ displayModeBar: false }}
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: 500, height: 470 }}
     />
   );
 }
