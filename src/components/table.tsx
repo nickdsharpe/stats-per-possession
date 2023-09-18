@@ -1,11 +1,12 @@
 import { useTable, Column } from "react-table";
-import { useState, ChangeEvent, useMemo } from "react";
+import { useEffect, useState, ChangeEvent, useMemo } from "react";
 import nuggets from "../data/Nuggets.json";
 import heat from "../data/Heat.json";
 import TeamDataDropdown from "./teamDataDropdown";
 import FilterDropdown from "./filterDropdown";
 import PlayerDataDropdown from "./playerDropdown";
 import GameDropdown from "./gameDropdown";
+import example_data from "../assets/example_data.json";
 
 const makePlayerArray = (data: object) =>
   Object.entries(data).map(([key, value]) => ({
@@ -73,6 +74,19 @@ function Table() {
   const [selectedPlayer, setSelectedPlayer] = useState("team");
   const [selectedData, setSelectedData] = useState(nuggets.Overall.team);
   const [selectedGame, setselectedGame] = useState("Overall");
+
+  const [exampleData, setExampleData] = useState({});
+
+  setExampleData(example_data.ovr_data.data);
+
+  useEffect(() => {
+    fetch("/process_json")
+      .then((res) => res.json())
+      .then((data) => {
+        setExampleData(data);
+        console.log(data);
+      });
+  }, []);
 
   const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newOption = event.target.value;

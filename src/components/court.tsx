@@ -40,7 +40,7 @@ function DrawPlotlyCourt() {
   // Create Marker data for selected shot locations
   const scatterData: any = [];
 
-  example_data["ovr_data"]["shooting_locations"].forEach((location) => {
+  example_data.ovr_data.shooting_locations.forEach((location) => {
     const coordinates = location[0] as [number, number];
     const isGreenMarker = location[1] === 1;
 
