@@ -1,5 +1,5 @@
 import Plot from "react-plotly.js";
-import courtImage from "../assets/court_image.jpg";
+import courtImage from "../assets/court_image.png";
 import example_data from "../assets/example_data.json";
 
 function DrawPlotlyCourt() {
@@ -40,11 +40,9 @@ function DrawPlotlyCourt() {
   // Create Marker data for selected shot locations
   const scatterData: any = [];
 
-  example_data["shooting_locations"].forEach((location) => {
+  example_data["ovr_data"]["shooting_locations"].forEach((location) => {
     const coordinates = location[0] as [number, number];
     const isGreenMarker = location[1] === 1;
-
-    const markerColor = isGreenMarker ? "#45e64c" : "f05443";
 
     const scatterTrace = {
       type: "scatter",
@@ -52,12 +50,12 @@ function DrawPlotlyCourt() {
       x: [coordinates[0]],
       y: [coordinates[1]],
       marker: {
-        color: "rgba(0, 0, 0, 0)",
-        size: 24,
-        symbol: "circle",
+        color: isGreenMarker ? "rgba(0, 0, 0, 0)" : "f05443",
+        size: 25,
+        symbol: isGreenMarker ? "circle" : "x",
         line: {
-          color: markerColor,
-          width: 6,
+          color: isGreenMarker ? "54e35a" : "rgba(0, 0, 0, 0)",
+          width: 7,
         },
       },
     };
