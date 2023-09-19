@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 import pandas as pd
-import json
 from PPP import PPP
+from flask_cors import CORS 
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/process_json', methods=['POST'])
 def process_json():
@@ -13,10 +14,11 @@ def process_json():
         
         # Process the data
         df = pd.DataFrame(data).transpose()
-        processed_data = PPP(data)
-
+        processed_data = PPP(df)
+        print(processed_data.reset_index().rename(columns={'index': 'Shot Type'}).to_dict(orient='records'))
+    
         # Return the updated JSON data as a response
-        return jsonify(processed_data)
+        return processed_data.reset_index().rename(columns={'index': 'Shot Type'}).to_dict(orient='records')
 
     except Exception as e:
         # Handle any exceptions that may occur during processing

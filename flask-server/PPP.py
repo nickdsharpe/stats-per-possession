@@ -1,7 +1,7 @@
 import pandas as pd
 
 def PPP(data):
-    
+
     #Grab the column headers
     headers = data.columns
     
@@ -571,5 +571,5 @@ def PPP(data):
 "ISO" : "ISOLATION", "TRAN" : "TRANSITION", "ACO" : "Attacking Closeouts", "C/S" : "Catch & Shoot", "OBS" : "Off Ball Screens", "CUT" : "Cutting", "OREB" : "Off. Rebounds"})
     
     data_df = data_df.transpose()
-    
+
     return(data_df)
