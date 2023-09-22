@@ -59,54 +59,54 @@ type teamData = {
 };
 
 const totalColumns = [
-  { Header: "Shot Type", accessor: "shottype" },
-  { Header: "Total PPP", accessor: "totalppp" },
-  { Header: "% of Poss.", accessor: "perofposs" },
-  { Header: "Total TO", accessor: "totalto" },
-  { Header: "Total Creation %", accessor: "totalcreationper" },
-  { Header: "Total FTR", accessor: "totalftr" },
-  { Header: "Total TS%", accessor: "totaltsper" },
-  { Header: "Total SQ", accessor: "totalsq" },
-  { Header: "Total 2pt FGA", accessor: "total2ptfga" },
-  { Header: "Total 2pt FG%", accessor: "total2ptfgper" },
-  { Header: "Total 2pt Shot Quality", accessor: "total2ptsq" },
-  { Header: "Total 3pt FGA", accessor: "total3ptfga" },
-  { Header: "Total 3pt FG%", accessor: "total3ptfgper" },
-  { Header: "Total 3pt Shot Quality", accessor: "total3ptsq" },
+  { Header: "Play Type", accessor: "Shot Type" },
+  { Header: "PPP", accessor: "Total PPP" },
+  { Header: "% of Poss.", accessor: "% of Poss." },
+  { Header: "TO", accessor: "Total TO" },
+  { Header: "Creation %", accessor: "Total Creation %" },
+  { Header: "FTR", accessor: "Total FTR" },
+  { Header: "TS%", accessor: "Total TS%" },
+  { Header: "Total SQ", accessor: "Total SQ" },
+  { Header: "2pt FGA", accessor: "Total 2pt FGA" },
+  { Header: "2pt FG%", accessor: "Total 2pt FG%" },
+  { Header: "2pt Shot Quality", accessor: "Total 2pt SQ" },
+  { Header: "3pt FGA", accessor: "Total 3pt FGA" },
+  { Header: "3pt FG%", accessor: "Total 3pt FG%" },
+  { Header: "3pt Shot Quality", accessor: "Total 3pt SQ" },
 ];
 
 const shootColumns = [
-  { Header: "Shot Type", accessor: "shottype" },
-  { Header: "Shooting PPP", accessor: "shootppp" },
-  { Header: "% of Shooting Poss.", accessor: "shootperofposs" },
-  { Header: "Shooting TO", accessor: "shootto" },
-  { Header: "Shooting Frequency", accessor: "shootfreq" },
-  { Header: "Shooting FTR", accessor: "shootftr" },
-  { Header: "Shooting TS%", accessor: "shoottsper" },
-  { Header: "Shooting Shot Quality", accessor: "shootsq" },
-  { Header: "Shooting 2pt FGA", accessor: "shoot2ptfga" },
-  { Header: "Shooting 2pt FG%", accessor: "shoot2ptfgper" },
-  { Header: "Shooting 2pt Shot Quality", accessor: "shoot2ptsq" },
-  { Header: "Shooting 3pt FGA", accessor: "shoot3ptfga" },
-  { Header: "Shooting 3pt FG%", accessor: "shoot3ptfgper" },
-  { Header: "Shooting 3pt Shot Quality", accessor: "shoot3ptsq" },
+  { Header: "Shot Type", accessor: "Shot Type" },
+  { Header: "Shooting PPP", accessor: "Shooting PPP" },
+  { Header: "% of Poss.", accessor: "% of Shooting Poss." },
+  { Header: "TO", accessor: "Shooting TO" },
+  { Header: "Shooting Frequency", accessor: "Shooting Freq." },
+  { Header: "FTR", accessor: "Shooting FTR" },
+  { Header: "TS%", accessor: "Shooting TS%" },
+  { Header: "Total Shot Quality", accessor: "Shooting SQ" },
+  { Header: "2pt Poss.", accessor: "Shooting 2pt Poss." },
+  { Header: "2pt FG%", accessor: "Shooting 2pt FG%" },
+  { Header: "2pt Shot Quality", accessor: "Shooting 2pt SQ" },
+  { Header: "3pt Poss.", accessor: "Shooting 3pt Poss." },
+  { Header: "3pt FG%", accessor: "Shooting 3pt FG%" },
+  { Header: "3pt Shot Quality", accessor: "Shooting 3pt SQ" },
 ];
 
 const passColumns = [
-  { Header: "Shot Type", accessor: "shottype" },
-  { Header: "Creation PPP", accessor: "passppp" },
-  { Header: "% of Creation Poss.", accessor: "passperofposs" },
-  { Header: "Creation TO", accessor: "passto" },
-  { Header: "Creation %", accessor: "passcreationper" },
-  { Header: "Creation FTR", accessor: "passftr" },
-  { Header: "Creation TS%", accessor: "passtsper" },
-  { Header: "Creation Shot Quality", accessor: "passsq" },
-  { Header: "Creation 2pt FGA", accessor: "pass2ptfga" },
-  { Header: "Creation 2pt FG%", accessor: "pass2ptfgper" },
-  { Header: "Creation 2pt Shot Quality", accessor: "pass2ptsq" },
-  { Header: "Creation 3pt FGA", accessor: "pass3ptfga" },
-  { Header: "Creation 3pt FG%", accessor: "pass3ptfgper" },
-  { Header: "Creation 3pt Shot Quality", accessor: "pass3ptsq" },
+  { Header: "Shot Type", accessor: "Shot Type" },
+  { Header: "Creation PPP", accessor: "Creation PPP" },
+  { Header: "% of Creation Poss.", accessor: "% of Creation Poss." },
+  { Header: "TO", accessor: "Creation TO" },
+  { Header: "Creation %", accessor: "Creation %" },
+  { Header: "FTR", accessor: "Creation FTR" },
+  { Header: "TS%", accessor: "Creation TS%" },
+  { Header: "Shot Quality", accessor: "Creation SQ" },
+  { Header: "2pt Poss.", accessor: "Creation 2pt FGA" },
+  { Header: "2pt FG%", accessor: "Creation 2pt FG%" },
+  { Header: "2pt Shot Quality", accessor: "Creation 2pt SQ" },
+  { Header: "3pt Poss.", accessor: "Creation 3pt FGA" },
+  { Header: "3pt FG%", accessor: "Creation 3pt FG%" },
+  { Header: "3pt Shot Quality", accessor: "Creation 3pt SQ" },
 ];
 
 function Table() {
@@ -114,26 +114,10 @@ function Table() {
   //const [selectedTeamData, setSelectedTeamData] = useState("Nuggets");
   //const [players, setPlayers] = useState([...makePlayerArray(nuggets.Overall)]);
   //const [selectedPlayer, setSelectedPlayer] = useState("team");
-  const [selectedData, setSelectedData] = useState(
-    makePlayerArray(example_data.ovr_data.data)
-  );
-  //const [selectedGame, setselectedGame] = useState("Overall");
+  const [selectedData, setSelectedData] = useState<teamData[]>([]);
+  const [dataFetched, setDataFetched] = useState(false);
 
-  useEffect(() => {
-    // Send a POST request to the Flask backend
-    fetch("http://127.0.0.1:5000/process_json", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(example_data.ovr_data.data),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setSelectedData(data);
-        console.log(data);
-      });
-  }, []);
+  //const [selectedGame, setselectedGame] = useState("Overall");
 
   const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newOption = event.target.value;
@@ -142,6 +126,26 @@ function Table() {
       setSelectedOption(newOption);
     }
   };
+
+  useEffect(() => {
+    if (!dataFetched) {
+      // Send a POST request to the Flask backend
+      fetch("http://127.0.0.1:5000/process_json", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(example_data.ovr_data.data),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setSelectedData(data);
+          console.log(makePlayerArray(data));
+          console.log(data);
+          setDataFetched(true); // Set dataFetched to true to avoid repeated fetching
+        });
+    }
+  }, [dataFetched]);
   /*
   const handleTeamChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newTeamData = event.target.value;
