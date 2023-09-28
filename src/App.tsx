@@ -1,4 +1,4 @@
-import "./styles.css";
+import "./assets/styles.css";
 import Table from "./components/table.tsx";
 import Title from "./components/Title.tsx";
 import DrawPlotlyCourt from "./components/court.tsx";

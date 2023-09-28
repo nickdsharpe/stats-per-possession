@@ -1,35 +1,30 @@
-import { useTable, Column } from "react-table";
-import { useEffect, useState, ChangeEvent, useMemo } from "react";
-//import TeamDataDropdown from "./teamDataDropdown";
+import { useEffect, useState, useMemo, ChangeEvent } from "react";
+import DataTable, { TableColumn } from "react-data-table-component";
 import FilterDropdown from "./filterDropdown";
-/*
-import PlayerDataDropdown from "./playerDropdown";
-import GameDropdown from "./gameDropdown";
-*/
 import example_data from "../assets/example_data.json";
+import { defaultStyles } from "../assets/tableStyles";
 
 const makePlayerArray = (data: object) =>
   Object.entries(data).map(([key, value]) => ({
-    player: key,
+    id: key,
     ...value,
   }));
 
 type teamData = {
-  player: string;
-  shottype: string;
-  totalppp: number | string;
-  perofposs: number | string;
-  totalto: number | string;
-  totalcreationper: number | string;
-  totalftr: number | string;
-  totaltsper: number | string;
-  totalsq: number | string;
-  total2ptfga: number | string;
-  total2ptfgper: number | string;
-  total2ptsq: number | string;
-  total3ptfga: number | string;
-  total3ptfgper: number | string;
-  total3ptsq: number | string;
+  "Shot Type": string;
+  "Total PPP": number | string;
+  "Percentage of Poss": number | string;
+  "Total TO": number | string;
+  "Total Creation %": number | string;
+  "Total FTR": number | string;
+  "Total TS%": number | string;
+  "Total SQ": number | string;
+  "Total 2pt FGA": number | string;
+  "Total 2pt FG%": number | string;
+  "Total 2pt SQ": number | string;
+  "Total 3pt FGA": number | string;
+  "Total 3pt FG%": number | string;
+  "Total 3pt SQ": number | string;
   shootppp: number | string;
   shootperofposs: number | string;
   shootto: number | string;
@@ -58,71 +53,94 @@ type teamData = {
   pass3ptsq: number | string;
 };
 
-const totalColumns = [
-  { Header: "Play Type", accessor: "Shot Type" },
-  { Header: "PPP", accessor: "Total PPP" },
-  { Header: "% of Poss.", accessor: "% of Poss." },
-  { Header: "TO", accessor: "Total TO" },
-  { Header: "Creation %", accessor: "Total Creation %" },
-  { Header: "FTR", accessor: "Total FTR" },
-  { Header: "TS%", accessor: "Total TS%" },
-  { Header: "Total SQ", accessor: "Total SQ" },
-  { Header: "2pt FGA", accessor: "Total 2pt FGA" },
-  { Header: "2pt FG%", accessor: "Total 2pt FG%" },
-  { Header: "2pt Shot Quality", accessor: "Total 2pt SQ" },
-  { Header: "3pt FGA", accessor: "Total 3pt FGA" },
-  { Header: "3pt FG%", accessor: "Total 3pt FG%" },
-  { Header: "3pt Shot Quality", accessor: "Total 3pt SQ" },
+const totalColumns: TableColumn<teamData>[] = [
+  { name: "Play Type", selector: (row) => row["Shot Type"] },
+  { name: "PPP", selector: (row) => row["Total PPP"] },
+  { name: "% of Poss.", selector: (row) => row["Percentage of Poss"] },
+  { name: "TO", selector: (row) => row["Total TO"] },
+  { name: "Creation %", selector: (row) => row["Total Creation %"] },
+  { name: "FTR", selector: (row) => row["Total FTR"] },
+  { name: "TS%", selector: (row) => row["Total TS%"] },
+  { name: "Total SQ", selector: (row) => row["Total SQ"] },
+  { name: "2pt FGA", selector: (row) => row["Total 2pt FGA"] },
+  { name: "2pt FG%", selector: (row) => row["Total 2pt FG%"] },
+  { name: "2pt SQ", selector: (row) => row["Total 2pt SQ"] },
+  { name: "3pt FGA", selector: (row) => row["Total 3pt FGA"] },
+  { name: "3pt FG%", selector: (row) => row["Total 3pt FG%"] },
+  { name: "3pt SQ", selector: (row) => row["Total 3pt SQ"] },
 ];
 
-const shootColumns = [
-  { Header: "Shot Type", accessor: "Shot Type" },
-  { Header: "Shooting PPP", accessor: "Shooting PPP" },
-  { Header: "% of Poss.", accessor: "% of Shooting Poss." },
-  { Header: "TO", accessor: "Shooting TO" },
-  { Header: "Shooting Frequency", accessor: "Shooting Freq." },
-  { Header: "FTR", accessor: "Shooting FTR" },
-  { Header: "TS%", accessor: "Shooting TS%" },
-  { Header: "Total Shot Quality", accessor: "Shooting SQ" },
-  { Header: "2pt Poss.", accessor: "Shooting 2pt Poss." },
-  { Header: "2pt FG%", accessor: "Shooting 2pt FG%" },
-  { Header: "2pt Shot Quality", accessor: "Shooting 2pt SQ" },
-  { Header: "3pt Poss.", accessor: "Shooting 3pt Poss." },
-  { Header: "3pt FG%", accessor: "Shooting 3pt FG%" },
-  { Header: "3pt Shot Quality", accessor: "Shooting 3pt SQ" },
+const shootColumns: TableColumn<teamData>[] = [
+  { name: "Shot Type", selector: (row) => row.shottype },
+  { name: "Shooting PPP", selector: (row) => row.shootppp },
+  { name: "% of Poss.", selector: (row) => row.shootperofposs },
+  { name: "TO", selector: (row) => row.shootto },
+  { name: "Shooting Frequency", selector: (row) => row.shootfreq },
+  { name: "FTR", selector: (row) => row.shootftr },
+  { name: "TS%", selector: (row) => row.shoottsper },
+  { name: "Total Shot Quality", selector: (row) => row.shootsq },
+  { name: "2pt Poss.", selector: (row) => row.shoot2ptfga },
+  { name: "2pt FG%", selector: (row) => row.shoot2ptfgper },
+  { name: "2pt Shot Quality", selector: (row) => row.shoot2ptsq },
+  { name: "3pt Poss.", selector: (row) => row.shoot3ptfga },
+  { name: "3pt FG%", selector: (row) => row.shoot3ptfgper },
+  { name: "3pt Shot Quality", selector: (row) => row.shoot3ptsq },
 ];
 
-const passColumns = [
-  { Header: "Shot Type", accessor: "Shot Type" },
-  { Header: "Creation PPP", accessor: "Creation PPP" },
-  { Header: "% of Creation Poss.", accessor: "% of Creation Poss." },
-  { Header: "TO", accessor: "Creation TO" },
-  { Header: "Creation %", accessor: "Creation %" },
-  { Header: "FTR", accessor: "Creation FTR" },
-  { Header: "TS%", accessor: "Creation TS%" },
-  { Header: "Shot Quality", accessor: "Creation SQ" },
-  { Header: "2pt Poss.", accessor: "Creation 2pt FGA" },
-  { Header: "2pt FG%", accessor: "Creation 2pt FG%" },
-  { Header: "2pt Shot Quality", accessor: "Creation 2pt SQ" },
-  { Header: "3pt Poss.", accessor: "Creation 3pt FGA" },
-  { Header: "3pt FG%", accessor: "Creation 3pt FG%" },
-  { Header: "3pt Shot Quality", accessor: "Creation 3pt SQ" },
+const passColumns: TableColumn<teamData>[] = [
+  { name: "Shot Type", selector: (row) => row.shottype },
+  { name: "Creation PPP", selector: (row) => row.passppp },
+  { name: "% of Creation Poss.", selector: (row) => row.passperofposs },
+  { name: "TO", selector: (row) => row.passto },
+  { name: "Creation %", selector: (row) => row.passcreationper },
+  { name: "FTR", selector: (row) => row.passftr },
+  { name: "TS%", selector: (row) => row.passtsper },
+  { name: "Shot Quality", selector: (row) => row.passsq },
+  { name: "2pt Poss.", selector: (row) => row.pass2ptfga },
+  { name: "2pt FG%", selector: (row) => row.pass2ptfgper },
+  { name: "2pt Shot Quality", selector: (row) => row.pass2ptsq },
+  { name: "3pt Poss.", selector: (row) => row.pass3ptfga },
+  { name: "3pt FG%", selector: (row) => row.pass3ptfgper },
+  { name: "3pt Shot Quality", selector: (row) => row.pass3ptsq },
 ];
+
+const customStyles = {
+  header: {
+    style: {
+      fontSize: "30px",
+      minHeight: "56px",
+      paddingLeft: "16px",
+      paddingRight: "8px",
+    },
+  },
+  rows: {
+    style: {
+      minHeight: "72px", // override the row height
+    },
+  },
+  headCells: {
+    style: {
+      paddingLeft: "0px", // override the cell padding for head cells
+      paddingRight: "0px",
+    },
+  },
+  cells: {
+    style: {
+      paddingLeft: "0px", // override the cell padding for data cells
+      paddingRight: "0px",
+    },
+  },
+};
 
 function Table() {
-  const [selectedOption, setSelectedOption] = useState("total");
-  //const [selectedTeamData, setSelectedTeamData] = useState("Nuggets");
-  //const [players, setPlayers] = useState([...makePlayerArray(nuggets.Overall)]);
-  //const [selectedPlayer, setSelectedPlayer] = useState("team");
-  const [selectedData, setSelectedData] = useState<teamData[]>([]);
+  const [selectedData, setSelectedData] = useState(example_data.ovr_data.data);
   const [dataFetched, setDataFetched] = useState(false);
-
-  //const [selectedGame, setselectedGame] = useState("Overall");
+  const [selectedOption, setSelectedOption] = useState("total");
 
   const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newOption = event.target.value;
 
-    if (newOption !== selectedOption) {
+    if (newOption != selectedOption) {
       setSelectedOption(newOption);
     }
   };
@@ -140,158 +158,39 @@ function Table() {
         .then((res) => res.json())
         .then((data) => {
           setSelectedData(data);
-          console.log(makePlayerArray(data));
-          console.log(data);
-          setDataFetched(true); // Set dataFetched to true to avoid repeated fetching
+          setDataFetched(true);
         });
     }
-  }, [dataFetched]);
-  /*
-  const handleTeamChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const newTeamData = event.target.value;
+  }, [selectedData, dataFetched]);
 
-    if (newTeamData !== selectedTeamData) {
-      setSelectedTeamData(newTeamData);
-      if (newTeamData === "Nuggets") {
-        setPlayers(makePlayerArray(nuggets.Overall));
-        setSelectedPlayer("team");
-        setSelectedData(nuggets.Overall.team);
-      } else if (newTeamData === "Heat") {
-        setPlayers(makePlayerArray(heat.Overall));
-        setSelectedPlayer("team");
-        setSelectedData(heat.Overall.team as any);
-      }
-    }
-  };
-/*
-  const handlePlayerChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const newPlayer = event.target.value;
-
-    if (newPlayer != selectedPlayer) {
-      setSelectedPlayer(newPlayer);
-      handlePlayerDataChange(newPlayer);
-    }
-  };
-
-  const handlePlayerDataChange = (newPlayer: string) => {
-    if (selectedTeamData === "Nuggets") {
-      const playerArray =
-        nuggets[selectedGame as "Overall"][
-          newPlayer as keyof typeof nuggets.Overall
-        ];
-      setSelectedData(playerArray as any);
-    } else if (selectedTeamData === "Heat") {
-      const playerArray =
-        heat[selectedGame as "Overall"][newPlayer as keyof typeof heat.Overall];
-      setSelectedData(playerArray as any);
-    }
-  };
-
-  const handleGameChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const newGame = event.target.value;
-    if (newGame != selectedGame) {
-      setselectedGame(newGame);
-      handleGameDataChange(newGame);
-    }
-  };
-
-  const handleGameDataChange = (newGame: string) => {
-    if (selectedTeamData === "Nuggets") {
-      const gameData =
-        nuggets[newGame as "Overall"][
-          selectedPlayer as keyof typeof nuggets.Overall
-        ];
-      setSelectedData(gameData as any);
-    }
-    if (selectedTeamData === "Heat") {
-      const gameData =
-        heat[newGame as "Overall"][selectedPlayer as keyof typeof heat.Overall];
-      setSelectedData(gameData as any);
-    }
-  };*/
-
-  const data = useMemo(() => selectedData, [selectedData]);
-
-  const columns: Column<teamData>[] = useMemo(
+  const columns: TableColumn<teamData>[] = useMemo(
     () => [
       ...(selectedOption === "total"
-        ? (totalColumns as Column<teamData>[])
+        ? (totalColumns as TableColumn<teamData>[])
         : []),
       ...(selectedOption === "shoot"
-        ? (shootColumns as Column<teamData>[])
+        ? (shootColumns as TableColumn<teamData>[])
         : []),
-      ...(selectedOption === "pass" ? (passColumns as Column<teamData>[]) : []),
+      ...(selectedOption === "pass"
+        ? (passColumns as TableColumn<teamData>[])
+        : []),
     ],
     [selectedOption]
   );
-
-  const tableInstance = useTable({ columns, data } as any);
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    tableInstance;
-
+  console.log(makePlayerArray(selectedData));
   return (
-    <div className="container">
-      <div className="dropdown-wrapper">
-        {/*
-        <TeamDataDropdown
-          selectedTeamData={selectedTeamData}
-          handleTeamChange={handleTeamChange}
-        />
-        <PlayerDataDropdown
-          selectedPlayer={selectedPlayer}
-          handlePlayerChange={handlePlayerChange}
-          players={players}
-        />*/}
-        <FilterDropdown
-          selectedOption={selectedOption}
-          handleOptionChange={handleOptionChange}
-        />
-        {/*
-        <GameDropdown
-          selectedGame={selectedGame}
-          handleGameChange={handleGameChange}
-  />*/}
-      </div>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps()}
-                  className="header-cell"
-                  style={{ backgroundColor: "rgb(194, 234, 250)" }}
-                >
-                  {column.render("Header")}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr
-                {...row.getRowProps()}
-                className="table-row ${index % 2 === 0 ? 'even' : 'odd'}"
-              >
-                {row.cells.map((cell, index) => (
-                  <td
-                    {...cell.getCellProps()}
-                    className={index === 0 ? "bold-column" : ""}
-                  >
-                    {cell.render("Cell")}
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    <div>
+      <FilterDropdown value={selectedOption} onChange={handleOptionChange} />
+      <DataTable
+        columns={columns}
+        data={makePlayerArray(selectedData)}
+        customStyles={customStyles}
+        dense={true}
+        highlightOnHover={true}
+        pagination={false}
+        striped={true}
+      />
     </div>
   );
 }
-
 export default Table;

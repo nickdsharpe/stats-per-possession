@@ -22,10 +22,12 @@
     "pandas": "^0.0.3",
     "plotly.js": "^2.26.0",
     "react": "^18.2.0",
+    "react-data-table-component": "^7.5.4",
     "react-dom": "^18.2.0",
     "react-plotly.js": "^2.6.0",
     "react-table": "^7.8.0",
-    "shotchart.d3.ts": "^0.1.34"
+    "shotchart.d3.ts": "^0.1.34",
+    "styled-components": "^6.0.8"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

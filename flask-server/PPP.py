@@ -248,7 +248,7 @@ def PPP(data):
         pass3FG_per = 'N/A'
     
     # Create the index
-    index = ['Total PPP', '% of Poss.', 'Total TO', 'Total Creation %', 'Total FTR', 'Total TS%', 'Total SQ' ,'Total 2pt FGA','Total 2pt FG%', 'Total 2pt SQ', 'Total 3pt FGA','Total 3pt FG%', 'Total 3pt SQ', 'Shooting PPP', '% of Shooting Poss.', 'Shooting TO', 'Shooting Freq.', 'Shooting FTR', 'Shooting TS%', 'Shooting SQ', 'Shooting 2pt Poss.', 'Shooting 2pt FG%', 'Shooting 2pt SQ', 'Shooting 3pt Poss.', 'Shooting 3pt FG%', 'Shooting 3pt SQ', 'Creation PPP', '% of Creation Poss.', 'Creation TO', 'Creation %', 'Creation FTR', 'Creation TS%', 'Creation SQ', 'Creation 2pt Poss.', 'Creation 2pt FG%', 'Creation 2pt SQ', 'Creation 3pt Poss.', 'Creation 3pt FG%', 'Creation 3pt SQ']   
+    index = ['Total PPP', 'Percentage of Poss', 'Total TO', 'Total Creation %', 'Total FTR', 'Total TS%', 'Total SQ' ,'Total 2pt FGA','Total 2pt FG%', 'Total 2pt SQ', 'Total 3pt FGA','Total 3pt FG%', 'Total 3pt SQ', 'Shooting PPP', 'Percentage of Shooting Poss', 'Shooting TO', 'Shooting Freq', 'Shooting FTR', 'Shooting TS%', 'Shooting SQ', 'Shooting 2pt Poss', 'Shooting 2pt FG%', 'Shooting 2pt SQ', 'Shooting 3pt Poss', 'Shooting 3pt FG%', 'Shooting 3pt SQ', 'Creation PPP', 'Percentage of Creation Poss', 'Creation TO', 'Creation %', 'Creation FTR', 'Creation TS%', 'Creation SQ', 'Creation 2pt Poss', 'Creation 2pt FG%', 'Creation 2pt SQ', 'Creation 3pt Poss', 'Creation 3pt FG%', 'Creation 3pt SQ']   
     
     # Create the PPP DataFrame
     data_df = pd.DataFrame(columns=headers, index=index)
@@ -363,12 +363,12 @@ def PPP(data):
             
         # Average out shooting Shot Quality, mark as N/A if no FGA's
         if shoot2FGA > 0:
-            shooting2SQ = shoot2SQ / shoot2FGA
+            shooting2SQ = round((shoot2SQ / shoot2FGA),2)
         else:
             shooting2SQ = 'N/A'
 
         if shoot3FGA > 0:
-            shooting3SQ = shoot3SQ / shoot3FGA
+            shooting3SQ = round((shoot3SQ / shoot3FGA),2)
         else:
             shooting3SQ = 'N/A'
 
@@ -380,13 +380,13 @@ def PPP(data):
             
         # Average out Passing Shot Quality, mark as N/A if no FGA's
         if pass2FGA > 0:
-            passing2SQ = pass2SQ / pass2FGA
+            passing2SQ = round((pass2SQ / pass2FGA),2)
         else:
             passing2SQ = 'N/A'
 
         if pass3FGA > 0:
             try:
-                passing3SQ = pass3SQ / pass3FGA
+                passing3SQ = round((pass3SQ / pass3FGA),2)
             except:
                 passing3SQ = 'N/A'
 

@@ -1,9 +1,4 @@
-import { ChangeEvent } from "react";
-
-type FilterDropdownProps = {
-  selectedOption: string;
-  handleOptionChange: (event: ChangeEvent<HTMLSelectElement>) => void;
-};
+type FilterDropdownProps = { selectedOption: any; handleOptionChange: any };
 
 const FilterDropdown: React.FC<FilterDropdownProps> = ({
   selectedOption,
