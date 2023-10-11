@@ -15,7 +15,7 @@ def process_json():
         # Process the data
         df = pd.DataFrame(data).transpose()
         processed_data = PPP(df)
-        processed_data = processed_data.iloc[:,: 13]
+
         # Return the updated JSON data as a response
         return processed_data.reset_index().rename(columns={'index': 'Shot Type'}).to_dict(orient='records')
 

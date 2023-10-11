@@ -1,5 +1,5 @@
 function Title() {
-  return <h1>Stats Per Possession</h1>;
+  return <h1>Empty Stats</h1>;
 }
 
 export default Title;

@@ -2,7 +2,8 @@ import Plot from "react-plotly.js";
 import courtImage from "../assets/court_image.png";
 import example_data from "../assets/example_data.json";
 
-function DrawPlotlyCourt() {
+function DrawPlotlyCourt(data: any) {
+  console.log(data);
   const layout: Partial<Plotly.Layout> = {
     images: [
       {
@@ -39,8 +40,8 @@ function DrawPlotlyCourt() {
 
   // Create Marker data for selected shot locations
   const scatterData: any = [];
-
-  example_data.ovr_data.shooting_locations.forEach((location) => {
+  //example_data.ovr_data.shooting_locations
+  data.ovr_data.shooting_locations.forEach((location: any) => {
     const coordinates = location[0] as [number, number];
     const isGreenMarker = location[1] === 1;
 
